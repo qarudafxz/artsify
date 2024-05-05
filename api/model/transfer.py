@@ -2,18 +2,16 @@ import torch
 from model.process import get_input_optimizer, get_style_model_and_losses
 
 def run_style_transfer(cnn, normalization_mean, normalization_std,
-                       content_img, style_img, input_img, num_steps=300,
+                       content_img, style_img, input_img, num_steps=150,
                        style_weight=1000000, content_weight=1):
     """Run the style transfer."""
     print('Building the style transfer model..')
     model, style_losses, content_losses = get_style_model_and_losses(cnn,
         normalization_mean, normalization_std, style_img, content_img)
 
-    # We want to optimize the input and not the model parameters so we
-    # update all the requires_grad fields accordingly
+ 
     input_img.requires_grad_(True)
-    # We also put the model in evaluation mode, so that specific layers
-    # such as dropout or batch normalization layers behave correctly.
+
     model.eval()
     model.requires_grad_(False)
 
@@ -24,7 +22,6 @@ def run_style_transfer(cnn, normalization_mean, normalization_std,
     while run[0] <= num_steps:
 
         def closure():
-            # correct the values of updated input image
             with torch.no_grad():
                 input_img.clamp_(0, 1)
 
@@ -55,7 +52,6 @@ def run_style_transfer(cnn, normalization_mean, normalization_std,
 
         optimizer.step(closure)
 
-    # a last correction...
     with torch.no_grad():
         input_img.clamp_(0, 1)
 
