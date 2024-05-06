@@ -1,9 +1,9 @@
 import torch
 from model.process import get_input_optimizer, get_style_model_and_losses
-
+# num_of_steps and style_weight's value needs to by dynamic and retrieved from the frontend
 def run_style_transfer(cnn, normalization_mean, normalization_std,
-                       content_img, style_img, input_img, num_steps=150,
-                       style_weight=1000000, content_weight=1):
+                       content_img, style_img, input_img, num_of_steps=150,
+                       style_weight=10000000, content_weight=1):
     """Run the style transfer."""
     print('Building the style transfer model..')
     model, style_losses, content_losses = get_style_model_and_losses(cnn,
@@ -19,8 +19,8 @@ def run_style_transfer(cnn, normalization_mean, normalization_std,
 
     print('Optimizing..')
     run = [0]
-    while run[0] <= num_steps:
-
+    while run[0] <= num_of_steps:
+ 
         def closure():
             with torch.no_grad():
                 input_img.clamp_(0, 1)

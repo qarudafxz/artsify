@@ -23,6 +23,10 @@ app.add_middleware(
     allow_methods=["*"],
 )
 
+"""
+    TODO: Add tweaks of values for number of steps and style weight from frontend
+    Extract key-value pairs from request body
+"""
 @app.post("/")
 async def root(input_image: UploadFile = File(...), style_image: UploadFile = File(...)):
     input_image_bytes = await input_image.read()
