@@ -14,5 +14,5 @@ def resize_image(input_image):
         bottom = (height + width) / 2
 
     input_image = input_image.crop((left, top, right, bottom))
-    input_image = input_image.resize((650, 650), Image.ANTIALIAS)
+    input_image = input_image.resize((650, 650))
     return input_image
